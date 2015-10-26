@@ -4,19 +4,13 @@
 #include <boost/variant.hpp>
 
 template <typename Result, typename... Fs>
-struct inplace_visitor : boost::static_visitor<Result>
+struct inplace_visitor : boost::static_visitor<Result>, overload_set<Fs...>
 {
-   overload_set<Fs...> m_overloads;
-
    inplace_visitor (Fs... fs):
-      m_overloads (std::move (fs)...)
+      overload_set<Fs...> (std::move (fs)...)
    {}
 
-   template<typename... Args>
-   Result operator()(Args&&... as) const
-   {
-      return m_overloads (std::forward<Args>(as)...);
-   }
+   using overload_set<Fs...>::operator();
 };
 
 template<typename Result, typename... Fs>
