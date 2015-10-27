@@ -41,10 +41,7 @@ int main ()
    v1 = true;
    boost::apply_visitor (visitor, v1);
 
-   auto apply = boost::apply_visitor (make_visitor<void> ([](int x) {std::cout << "int = " << x << std::endl;},
-                                                          [](double x) {std::cout << "Double = " << x << std::endl;},
-                                                          [](const std::string& x) {std::cout << "String = " << x << std::endl;},
-                                                          [](auto x) {std::cout << "auto = " << x << std::endl;}));
+   auto apply = boost::apply_visitor (visitor);
    v1 = 1;
    apply (v1);
    v1 = 2.0;
@@ -74,16 +71,16 @@ int main ()
                             [](auto i1, auto i2){std::cout << "auto,auto = (" << i1 << "," << i2 << ")" << std::endl;}),
                          v1, v2);   
 
-   std::cout << boost::apply_visitor (make_visitor<int> ([](int x) {return 1;},
-                                                         [](double x) {return 2;},
-                                                         [](const std::string& x) {return 3;},
-                                                         [](auto x) {return 0;}),
+   std::cout << boost::apply_visitor (make_visitor<int> ([](int) {return 1;},
+                                                         [](double) {return 2;},
+                                                         [](const std::string&) {return 3;},
+                                                         [](auto) {return 0;}),
                                       v1) << std::endl;
    v1 = 1;
-   std::cout << boost::apply_visitor (make_visitor<int> ([](int x) {return 1;},
-                                                         [](double x) {return 2;},
-                                                         [](const std::string& x) {return 3;},
-                                                         [](auto x) {return 0;}),
+   std::cout << boost::apply_visitor (make_visitor<int> ([](int) {return 1;},
+                                                         [](double) {return 2;},
+                                                         [](const std::string&) {return 3;},
+                                                         [](auto) {return 0;}),
                                       v1) << std::endl;
       
    return 0;
